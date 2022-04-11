@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <h1 style="text-align:left">Профиль</h1>
+</div>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+    <div style="font-weight:bold">
+        {{form.email_info.label}}<br>
+    </div>
+    {{current_user.email}}<br>
+    <p>
+    <div style="font-weight:bold">
+        {{form.first_name.label}}<br>
+    </div>
+    {{current_user.first_name}}<br>
+    <p>
+    <div style="font-weight:bold">
+        {{form.second_name.label}}<br>
+    </div>
+    {{current_user.second_name}}<br>
+</form>
+{% endblock %}

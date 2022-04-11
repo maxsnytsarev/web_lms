@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 style="text-align:left">Информация</h1>
+<form action="" method="post">
+    <div>
+        <p>
+            Напишите про себя,
+            чтобы другим пользователям было удобнее вас найти и
+            добавить в друзья
+        </p>
+    </div>
+    <h2>О вас</h2>
+    <form method="post">
+        <input name="date" type="text" class="text" value="{{current_user.about}}">
+        <br>
+        <br>
+        <input type="submit" value="Изменить">
+    </form>
+<!--    <a id="info" href="/info_1"> дальше</a><br>-->
+</form>
+{% endblock %}

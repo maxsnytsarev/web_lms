@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Сообщения</h1>
+{% if sp %}
+{% for item in sp%}
+<div class="col-md6 border rounded">
+    <h2>Пользователь - {{item}}</h2>
+    <br>
+    <div>
+        Информация о нем
+    </div>
+    <br>
+</div>
+{% endfor %}
+{% else %}
+<p>
+    Друзей пока нет
+</p>
+{% endif %}
+{% endblock %}

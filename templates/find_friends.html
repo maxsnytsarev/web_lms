@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Пользователи</h1>
+{% if flag1 %}
+{% for item in range(l)%}
+<div class="col-md6 border rounded">
+    {% if current_user.email != users[item].email%}
+    {% if users[item].email not in req %}
+    {% if users[item].email not in req1 %}
+    <h2>Пользователь - {{users[item].first_name}} {{users[item].second_name}}</h2>
+    <br>
+    <div>
+        Информация о нем
+    </div>
+    <br>
+    <div>
+        {{users[item].about}}<br>
+    </div>
+    <a id="friend" href="/try_f/{{ users[item].email }}" class="btn btn-success"> добавить в друзья</a>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+</div>
+{% if item != l - 1 %}
+<br>
+{% endif %}
+{% endfor %}
+{%else%}
+<p>
+    Пока новых пользователей нет,
+</p>
+<p>
+    Но они скоро появятся!
+</p>
+{%endif%}
+{% endblock %}

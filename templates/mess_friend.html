@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{friend}}</h1>
+<form action="" method="post">
+    {% for item in mess %}
+    {% if item[1] == 1%}
+    <p style="text-align:left">{{item[0]}}</p>
+    {% else %}
+    <p style="text-align:right">{{item[0]}}</p>
+    {% endif %}
+    {% endfor %}
+    <p>{{form.mess}}</p>
+    <p>{{form.submit(type="submit", class="btn btn-primary") }}</p>
+    <p>{{form.submit_new(type="submit") }}</p>
+<!--    <a href="/update_mess/{{friend}}"> обновить </a>-->
+</form>
+{% endblock %}

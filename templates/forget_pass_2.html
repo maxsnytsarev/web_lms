@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="text-align:center">Восстановление пароля</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.newpass1.label }}<br>
+            {{ form.newpass1(class="form-control")}}<br>
+            {% for error in form.newpass1.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+            {{ form.newpass2.label }}<br>
+            {{ form.newpass2(class="form-control") }}<br>
+            {% for error in form.newpass2.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    </form>
+{% endblock %}

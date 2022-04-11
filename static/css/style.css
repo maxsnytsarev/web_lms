@@ -1,0 +1,49 @@
+/*****NAVBAR****/
+#navbar ul {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+#navbar ul li {
+    display: inline-block;
+    padding: 1.5% 2%;
+}
+
+#navbar ul li a {
+    color: #4F8E64;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+#navbar ul li a:hover {
+    text-decoration: underline;
+}
+
+/**********************
+******NAV BUTTONS******
+**********************/
+
+    .button {
+    font-size: 0.9em;
+}
+
+.button-log-in {
+    color: #6EC78B;
+    background-color: #FFF;
+    border: 1px solid #6EC78B;
+}
+
+.button-log-in:hover {
+    color: #5CE68A;
+    border: 1px solid #5CE68A;
+}
+
+.button-sign-up {
+    color: #FFF;
+    background-color: #6EC78B;
+}
+
+.button-sign-up:hover {
+    background-color: #5CE68A;
+}
