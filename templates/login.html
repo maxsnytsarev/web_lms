@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Войти Max23122006</h1>
-    <form action="" method="post">
+    <form action="" method="post" class="login">
         {{ form.hidden_tag() }}
         <p>
             {{ form.email.label }}<br>
@@ -22,7 +22,7 @@
                 </div>
             {% endfor %}
         </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+<!--        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>-->
         <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
         <a id="forget" href="/forget_pass">Забыли пароль?</a>
     </form>

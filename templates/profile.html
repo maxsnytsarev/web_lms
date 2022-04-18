@@ -2,14 +2,12 @@
 
 {% block content %}
 <div>
-    <h1 style="text-align:left">Профиль</h1>
+    <h1 style="text-align:center">Профиль</h1>
 </div>
-<form action="" method="post">
+<form action="" method="post" class="profile">
     {{ form.hidden_tag() }}
-    <p>
-    <div style="font-weight:bold">
+    <p style="font-weight:bold">
         {{form.email_info.label}}<br>
-    </div>
     {{current_user.email}}<br>
     <p>
     <div style="font-weight:bold">

@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Пользователи</h1>
+<h1>Заявки</h1>
 {% if sp %}
 {% for item in sp%}
 <div class="col-md6 border rounded">
-    <h2>Пользователь - {{item}}</h2>
-    <a class="btn btn-primary" id="ac_friend" href="/accept_f/{{ item }}"> добавить</a>
-    <a class="btn btn-secondary" id="dec_friend" href="decline_f/{{ item }}">отказать</a>
+    <h2>{{item[0] + " " + item[1]}}</h2>
+    <a class="btn btn-primary" id="ac_friend" href="/accept_f/{{ item[2] }}"> добавить</a>
+    <a class="btn btn-secondary" id="dec_friend" href="decline_f/{{ item[2] }}">отказать</a>
 </div>
 {% endfor %}
 {% else %}
-<p>
+<p style="color:#fff">
     Новых заявок пока нет
 </p>
 {% endif %}

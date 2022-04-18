@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Сообщения</h1>
+<h1 style="color: #fff">Сообщения</h1>
+<br>
 {% if sp %}
 {% for item in range(l)%}
 <div class="col-md6 border rounded">
-    <h2>Пользователь - {{sp[item]}}</h2>
-    <a class="btn btn-success btn-sm" id="ac_friend" href="/message_f/{{ sp[item] }}">Написать</a>
+    <h2>{{sp[item][0] + " " + sp[item][1]}}</h2>
+    <a class="btn btn-success btn-sm" id="ac_friend" href="/message_f/{{ sp[item][2] }}">Написать</a>
 </div>
 {% if item != l - 1 %}
 <br>
 {% endif %}
 {% endfor %}
 {% else %}
-<p>
+<p style="color:#fff">
     У вас пока нет друзей с которыми можно переписываться
-</p>
-<p>
+    <br>
     Самое время найти новых друзей
 </p>
 <a id="find" href="/find" class="btn btn-primary btn-sm">Найти друзей</a>

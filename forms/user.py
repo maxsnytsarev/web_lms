@@ -11,5 +11,5 @@ class RegisterForm(FlaskForm):
     second_name = StringField('Фамилия*', validators=[DataRequired()])
     # second_nam = StringField('Фамилия*')
     code = StringField("Кодовое слово*", validators=[DataRequired()])
-    about = TextAreaField("About you")
+    about = TextAreaField("О вас")
     submit = SubmitField('Зарегистрироваться')

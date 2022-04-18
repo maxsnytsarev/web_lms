@@ -1,3 +1,4 @@
+from json import *
 from flask import Flask, flash
 from data import db_session
 from data.users import User
@@ -15,6 +16,10 @@ from forms.forget_pass_0 import forget_pass_0
 from forms.forget_pass import forget_pass_1
 from forms.forget_pass_2 import forget_pass_2
 from forms.messages import Message
+# mess = open('messages.json')
+# messages = load(mess)
+with open('messages.json') as mess0:
+    messages = load(mess0)
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager = LoginManager()
@@ -22,7 +27,6 @@ login_manager.init_app(app)
 users = []
 # forms = [('/', None)]
 # forms1 = []
-messages = dict()
 cnt_messages = dict()
 
 
@@ -81,6 +85,8 @@ def reqister():
             x = messages.get(user.email, 0)
             if not x:
                 messages[user.email] = dict()
+                with open('messages.json', 'w') as mess1:
+                    dump(messages, mess1)
             return redirect('/login')
     return render_template('register.html', form=form, flag=False)
 
@@ -121,7 +127,9 @@ def forget0():
         db_sess = db_session.create_session()
         yes = False
         for user in db_sess.query(User).all():
-            if form.email.data == user.email and form.code == user.code:
+            print(form.email.data, user.email)
+            print(form.code, user.code)
+            if form.email.data == user.email and form.code.data == user.code:
                 yes = True
                 break
         if not yes:
@@ -194,7 +202,7 @@ def request_():
     req = []
     if user.requests:
         users = user.requests.split('#$#')
-        req = [i for i in users if i != '']
+        req = [[db_sess.query(User).filter(User.email == i).first().first_name, db_sess.query(User).filter(User.email == i).first().second_name, i] for i in users if i != '']
     return render_template('friend_request.html', sp=req, flag=True)
 
 
@@ -254,11 +262,24 @@ def find():
     if user.requests:
         users_1 = user.requests.split('#$#')
         req1 = [i for i in users_1 if i != '']
+    users_norm = []
     for i in users:
-        if i.email not in req and i.email not in req1:
-            flag = True
-    users_norm = [i for i in users if i != '']
-    return render_template('find_friends.html', users=users, req=req, req1=req1, flag1=flag, flag=True, l=len(users_norm))
+        if i.email == user.email:
+            continue
+        if i.email != '':
+            a = []
+            if i.requests != None:
+                a = i.requests.split("#$#")
+            if user.email not in a:
+                b = []
+                if i.friends != None:
+                    b = i.friends.split("#$#")
+                if user.email not in b:
+                    flag = True
+                    users_norm.append(i)
+
+    # users_norm = [i for i in users if i.email != '' and user.email not in i.requests.split("#$#") and user.email not in i.requests.split("#$#")]
+    return render_template('find_friends.html', users=users_norm, flag1=flag, flag=True, l=len(users_norm))
 
 
 @app.route('/try_f/<email>')
@@ -280,7 +301,7 @@ def friend():
     req = []
     if user.requests:
         users = user.friends.split('#$#')
-        req = [i for i in users if i != '']
+        req = [(i, db_sess.query(User).filter(User.email == i).first().about) for i in users if i != '']
     return render_template('friends.html', sp=req, flag=True)
 
 
@@ -292,7 +313,7 @@ def mess():
     req = []
     if user.friends:
         users = user.friends.split('#$#')
-        req = [i for i in users if i != '']
+        req = [[db_sess.query(User).filter(User.email == i).first().first_name, db_sess.query(User).filter(User.email == i).first().second_name, i] for i in users if i != '']
     return render_template('messages.html', sp=req, flag=True, l=len(req))
 
 
@@ -300,6 +321,10 @@ def mess():
 def mess_(email_):
     sp = []
     email = email_
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.email == email).first()
+    n1 = user.first_name
+    n2 = user.second_name
     can = False
     if email_[0] == '[':
         sp = email_.split(',')
@@ -315,38 +340,108 @@ def mess_(email_):
         can = True
     form = Message()
     if can:
-        form.mess.data = sp[0]
+        request.form['mess'] = sp[0]
     if request.method == 'GET':
         y = messages[current_user.email].get(email, 0)
         if not y:
             messages[current_user.email][email] = []
             messages[email][current_user.email] = []
+            with open('messages.json', 'w') as mess2:
+                dump(messages, mess2)
         from_me = messages[current_user.email][email]
         can = False
         if messages[current_user.email][email]:
             can = True
-        return render_template('mess_friend.html', friend=email, mess=from_me, form=form, flag1=can, flag=True)
+        return render_template('mess_friend.html', n1=n1, n2=n2, mess=from_me, form=form, flag1=can, flag=True)
     if request.method == 'POST':
+        a = request.form['mess']
         y = messages[current_user.email].get(email, 0)
         if y == 0:
             messages[current_user.email][email] = []
             messages[email][current_user.email] = []
+            with open('messages.json', 'w') as mess3:
+                dump(messages, mess3)
         from_me = messages[current_user.email][email]
-        if form.mess.data:
+        if request.form['mess']:
             x = messages[current_user.email].get(email, 0)
             if x == 0:
-                messages[current_user.email][email] = [(form.mess.data, 0)]
-                messages[email][current_user.email] = [(form.mess.data, 1)]
+                messages[current_user.email][email] = [(request.form['mess'], 0)]
+                messages[email][current_user.email] = [(request.form['mess'], 1)]
+                with open('messages.json', 'w') as mess4:
+                    dump(messages, mess4)
             else:
-                messages[current_user.email][email].append((form.mess.data, 0))
-                messages[email][current_user.email].append((form.mess.data, 1))
+                messages[current_user.email][email].append((request.form['mess'], 0))
+                messages[email][current_user.email].append((request.form['mess'], 1))
+                with open('messages.json', 'w') as mess5:
+                    dump(messages, mess5)
             from_me = messages[current_user.email][email]
-            form.mess.data = ''
         # can = False
         # if messages[current_user.email][email]:
         #     can = True
-        return render_template('mess_friend.html', friend=email, mess=from_me, form=form, flag=True)
+        return render_template('mess_friend.html', n1=n1, n2=n2, friend=email, mess=from_me, form=form, flag=True)
 
+# @app.route('/message_f/<email_>', methods=['GET', 'POST'])
+# def mess_(email_):
+#     sp = []
+#     email = email_
+#     db_sess = db_session.create_session()
+#     user = db_sess.query(User).filter(User.email == email).first()
+#     n1 = user.first_name
+#     n2 = user.second_name
+#     can = False
+#     if email_[0] == '[':
+#         sp = email_.split(',')
+#         for i in range(len(sp)):
+#             if sp[i][0] == ' ':
+#                 sp[i] = sp[i][1:]
+#             if sp[i][0] == '[':
+#                 sp[i] = sp[i][1:]
+#             elif sp[i][-1] == ']':
+#                 sp[i] = sp[i][:-1]
+#             sp[i] = sp[i][1:-1]
+#         email = sp[1]
+#         can = True
+#     form = Message()
+#     if can:
+#         form.mess.data = sp[0]
+#     if request.method == 'GET':
+#         y = messages[current_user.email].get(email, 0)
+#         if not y:
+#             messages[current_user.email][email] = []
+#             messages[email][current_user.email] = []
+#             with open('messages.json', 'w') as mess2:
+#                 dump(messages, mess2)
+#         from_me = messages[current_user.email][email]
+#         can = False
+#         if messages[current_user.email][email]:
+#             can = True
+#         return render_template('mess_friend.html', n1=n1, n2=n2, mess=from_me, form=form, flag1=can, flag=True)
+#     if request.method == 'POST':
+#         y = messages[current_user.email].get(email, 0)
+#         if y == 0:
+#             messages[current_user.email][email] = []
+#             messages[email][current_user.email] = []
+#             with open('messages.json', 'w') as mess3:
+#                 dump(messages, mess3)
+#         from_me = messages[current_user.email][email]
+#         if form.mess.data:
+#             x = messages[current_user.email].get(email, 0)
+#             if x == 0:
+#                 messages[current_user.email][email] = [(form.mess.data, 0)]
+#                 messages[email][current_user.email] = [(form.mess.data, 1)]
+#                 with open('messages.json', 'w') as mess4:
+#                     dump(messages, mess4)
+#             else:
+#                 messages[current_user.email][email].append((form.mess.data, 0))
+#                 messages[email][current_user.email].append((form.mess.data, 1))
+#                 with open('messages.json', 'w') as mess5:
+#                     dump(messages, mess5)
+#             from_me = messages[current_user.email][email]
+#             form.mess.data = ''
+#         # can = False
+#         # if messages[current_user.email][email]:
+#         #     can = True
+#         return render_template('mess_friend.html', n1=n1, n2=n2, friend=email, mess=from_me, form=form, flag=True)
 
 def main():
     db_session.global_init("db/users.db")
@@ -371,8 +466,8 @@ if __name__ == '__main__':
     # main()
     # main1()
     # db_session.global_init("db/blogs.db")
-    # # main()
-    # main1()
-    # app.run(port=5000, host='127.0.0.1')
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    # main()
+    main1()
+    app.run(port=5000, host='127.0.0.1')
+    # port = int(os.environ.get("PORT", 5000))
+    # app.run(host='0.0.0.0', port=port)

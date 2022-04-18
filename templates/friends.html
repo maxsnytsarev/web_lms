@@ -1,20 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Сообщения</h1>
+<h1 style="color: #fff">Друзья</h1>
 {% if sp %}
 {% for item in sp%}
 <div class="col-md6 border rounded">
-    <h2>Пользователь - {{item}}</h2>
-    <br>
+    <h2>Пользователь - {{item[0]}}</h2>
     <div>
-        Информация о нем
+        {{item[1]}}
     </div>
-    <br>
 </div>
 {% endfor %}
 {% else %}
-<p>
+<p style="color:#fff">
     Друзей пока нет
 </p>
 {% endif %}
