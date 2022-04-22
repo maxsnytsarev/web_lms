@@ -4,11 +4,17 @@
 <h1 style="text-align:left">Информация</h1>
 <form action="" method="post">
     <div style="color: #ffffff">
+        {% if not current_user.about %}
         <p>
             Напишите про себя,
             чтобы другим пользователям было удобнее вас найти и
             добавить в друзья
         </p>
+        {% else %}
+        <p>
+            Вы можете отредактировать информацию о себе.
+        </p>
+        {%endif%}
     </div>
     <h2 style="color:#fff">О вас</h2>
     <form method="post">

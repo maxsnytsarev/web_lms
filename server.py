@@ -101,6 +101,9 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
+        else:
+            flash('Неправильный логин или пароль', category='error')
+            return render_template('login.html', form=form, flag=False)
     return render_template('login.html', form=form, flag=False)
 
 
@@ -133,7 +136,7 @@ def forget0():
                 yes = True
                 break
         if not yes:
-            flash("Такого email не существует", category='error')
+            flash("Такого email не существует или неправильное кодовое слово", category='error')
         if yes:
             return redirect(f'/forget_pass_1/{form.email.data}')
     return render_template('forget_pass_1.html', form=form, flag=False)
@@ -200,10 +203,17 @@ def request_():
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.email == current_user.email).first()
     req = []
+    req1 = []
     if user.requests:
         users = user.requests.split('#$#')
         req = [[db_sess.query(User).filter(User.email == i).first().first_name, db_sess.query(User).filter(User.email == i).first().second_name, i] for i in users if i != '']
-    return render_template('friend_request.html', sp=req, flag=True)
+        req_set = []
+        req1 = []
+        for i in req:
+            if i not in req_set:
+                req_set.append(i)
+                req1.append(i)
+    return render_template('friend_request.html', sp=req1, flag=True, l=len(req1))
 
 
 @app.route('/decline_f/<email>')
@@ -249,7 +259,7 @@ def accept_f(email):
 @app.route('/find')
 def find():
     db_sess = db_session.create_session()
-    users = db_sess.query(User).filter(User.about)
+    users1 = db_sess.query(User).filter(User.about != '').all()
     user = db_sess.query(User).filter(User.email == current_user.email).first()
     flag = False
     req = []
@@ -263,7 +273,7 @@ def find():
         users_1 = user.requests.split('#$#')
         req1 = [i for i in users_1 if i != '']
     users_norm = []
-    for i in users:
+    for i in users1:
         if i.email == user.email:
             continue
         if i.email != '':
@@ -291,7 +301,7 @@ def add_friend(email):
     user.requests += current_user.email
     user.requests += '#$#'
     db_sess.commit()
-    return redirect('/')
+    return redirect('/find')
 
 
 @app.route('/friends')
@@ -302,7 +312,7 @@ def friend():
     if user.requests:
         users = user.friends.split('#$#')
         req = [(i, db_sess.query(User).filter(User.email == i).first().about) for i in users if i != '']
-    return render_template('friends.html', sp=req, flag=True)
+    return render_template('friends.html', sp=req, flag=True, l=len(req))
 
 
 @app.route('/message')
@@ -380,6 +390,10 @@ def mess_(email_):
         #     can = True
         return render_template('mess_friend.html', n1=n1, n2=n2, friend=email, mess=from_me, form=form, flag=True)
 
+# @app.route('/posts')
+# def posts():
+
+
 # @app.route('/message_f/<email_>', methods=['GET', 'POST'])
 # def mess_(email_):
 #     sp = []
@@ -454,7 +468,7 @@ def main():
 
 def main1():
     db_session.global_init("db/users.db")
-    app.run()
+    # app.run()
     user = User()
     db_sess = db_session.create_session()
     # db_sess.query(User).filter(User.id >= 1).delete()
@@ -462,12 +476,22 @@ def main1():
     db_sess.commit()
 
 
+# import os
+#
+# from flask import Flask
+#
+# app = Flask(__name__)
+#
+#
+# @app.route("/")
+# def index():
+#     return "Привет от приложения Flask"
+
 if __name__ == '__main__':
     # main()
     # main1()
     # db_session.global_init("db/blogs.db")
     # main()
     main1()
-    app.run(port=5000, host='127.0.0.1')
-    # port = int(os.environ.get("PORT", 5000))
-    # app.run(host='0.0.0.0', port=port)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)

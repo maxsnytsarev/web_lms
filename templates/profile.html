@@ -1,23 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>
+<div xmlns="http://www.w3.org/1999/html">
     <h1 style="text-align:center">Профиль</h1>
 </div>
-<form action="" method="post" class="profile">
-    {{ form.hidden_tag() }}
-    <p style="font-weight:bold">
-        {{form.email_info.label}}<br>
-    {{current_user.email}}<br>
-    <p>
-    <div style="font-weight:bold">
-        {{form.first_name.label}}<br>
-    </div>
-    {{current_user.first_name}}<br>
-    <p>
-    <div style="font-weight:bold">
-        {{form.second_name.label}}<br>
-    </div>
-    {{current_user.second_name}}<br>
-</form>
+<div class="col-md6 border rounded profile">
+        <h2>{{form.email_info.label}}</h2>
+        <div>
+        {{current_user.email}}<br>
+        </div>
+        <h2>{{form.first_name.label}}</h2>
+        <div>
+            {{current_user.first_name}}<br>
+        </div>
+        <h2>{{form.second_name.label}}</h2>
+        <div>
+        {{current_user.second_name}}<br>
+        </div>
+</div>
 {% endblock %}

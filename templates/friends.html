@@ -3,17 +3,21 @@
 {% block content %}
 <h1 style="color: #fff">Друзья</h1>
 {% if sp %}
-{% for item in sp%}
+{% for item in range(l)%}
 <div class="col-md6 border rounded">
-    <h2>Пользователь - {{item[0]}}</h2>
+    <h2>Пользователь - {{sp[item][0]}}</h2>
     <div>
-        {{item[1]}}
+        {{sp[item][1]}}
     </div>
 </div>
+{% if item != l - 1 %}
+<br>
+{% endif %}
 {% endfor %}
 {% else %}
 <p style="color:#fff">
-    Друзей пока нет
+    Друзей пока нет, но вы можете их найти
 </p>
+<a id="find" href="/find" class="btn btn-primary btn-sm">Найти друзей</a>
 {% endif %}
 {% endblock %}

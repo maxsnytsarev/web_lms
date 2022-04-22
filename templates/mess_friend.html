@@ -16,17 +16,17 @@
         </div>
         {% endif %}
         {% endfor %}
+    </div>
 <!--        <p>{{form.mess}}</p>-->
-        <div class='chatbox_input'>
-            <input type="text" placeholder="Введите сообщение" name="mess">
-            <div class="chatbox_input write">
+    <div class='chatbox_input'>
+        <input type="text" placeholder="Введите сообщение" name="mess">
+        <div class="chatbox_input write">
             <p>{{form.submit(type="submit", class="btn btn-primary") }}</p>
             </div>
             <div class="chatbox_input update">
             <p>{{form.submit_new(type="submit") }}</p>
             </div>
         </div>
-    </div>
 <!--    <a href="/update_mess/{{friend}}"> обновить </a>-->
 </form>
 {% endblock %}
