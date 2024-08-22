@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Войти Max23122006</h1>
+    <h1>Войти</h1>
     <form action="" method="post" class="login">
         {{ form.hidden_tag() }}
         <p>
@@ -12,7 +12,6 @@
                     {{ error }}
                 </div>
             {% endfor %}
-        </p>
         <p>
             {{form.password.label}}<br>
             {{ form.password(class="form-control", type="password") }}<br>
@@ -21,9 +20,8 @@
                     {{ error }}
                 </div>
             {% endfor %}
-        </p>
 <!--        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>-->
         <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
-        <a style="color" id="forget" href="/forget_pass">Забыли пароль?</a>
+        <a style="color: #7AF085" id="forget" href="/forget_pass">Забыли пароль?</a>
     </form>
 {% endblock %}

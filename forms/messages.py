@@ -6,4 +6,4 @@ from wtforms.validators import DataRequired
 class Message(FlaskForm):
     mess = StringField('a')
     submit = SubmitField('Написать')
-    submit_new = SubmitField('update')
+    submit_new = SubmitField('Обновить')

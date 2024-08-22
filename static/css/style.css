@@ -143,18 +143,21 @@ col-md6.border.rounded.profile h2{
     text-align: center;
     width:100%;
 } */
-
+.container.b{
+    height:100%;
+}
 body {
     background: #4b6154;
 }
 #chat-page{
     background: #64ac8f ;
     padding: 2.5% ;
+    height: 70%;
     color: #000000 ;
 }
 .chat-box{
     position: relative;
-    height: 400px;
+    height: 60%;
     width: 100%;
     padding: 0 50px;
     overflow-y: auto;
@@ -196,7 +199,6 @@ body {
     text-align: left;
 
 }
-
 .message.frnd-message p::before
 {
     content: '';
@@ -209,10 +211,9 @@ body {
 }
 
 .chatbox_input{
-    height: 60px;
+    height: 35%;
     background: #64ac8f;
     padding: 15px;
-    display: flex;
     justify-content: space-between;
     align-items: center;
 }
@@ -288,4 +289,14 @@ col-md6.border.rounded.profile h2{
     position: relative;
     text-align: center;
     width:100%;
+}
+body{
+    height:100%;
+}
+html{
+    height:100%;
+}
+.inf{
+    border-radius: 2px;
+    border: none;
 }

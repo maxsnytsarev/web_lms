@@ -3,20 +3,22 @@
 {% block content %}
 <h1 style="color: #ffffff">Пользователи</h1>
 {% if l != 0 %}
-{% for item in range(l)%}
-<div class="col-md6 border rounded">
-    {% if current_user.email != users[item].email%}
-    <h2>{{users[item].first_name}} {{users[item].second_name}}</h2>
-    <div>
-        {{users[item].about}}<br>
+<div class="find-box">
+    {% for item in range(l)%}
+    <div class="col-md6 border rounded">
+        {% if current_user.email != users[item].email%}
+        <h2>{{users[item].first_name}} {{users[item].second_name}}</h2>
+        <div>
+            {{users[item].about}}<br>
+        </div>
+        <a id="friend" href="/try_f/{{ users[item].email }}" class="btn btn-success"> добавить в друзья</a>
+        {% endif %}
     </div>
-    <a id="friend" href="/try_f/{{ users[item].email }}" class="btn btn-success"> добавить в друзья</a>
+    {% if item != l - 1 %}
+    <br>
     {% endif %}
+    {% endfor %}
 </div>
-{% if item != l - 1 %}
-<br>
-{% endif %}
-{% endfor %}
 {%else%}
 <p style="color: #ffffff">
     Пока новых пользователей нет,

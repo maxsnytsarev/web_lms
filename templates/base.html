@@ -25,14 +25,12 @@
   </button>
 <!--    <div class="collapse navbar-collapse" id="navbar">-->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
+            </li>
+
       {% if current_user.is_authenticated and flag%}
-      <li class="nav-item active">
-          <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
-        </li>
-        <li>
-            <a class="nav-link" href="/posts">Посты<span class="sr-only">(current)</span></a>
-        </li>
       <li>
           <a class="nav-link" href="/message">Сообщения <span class="sr-only">(current)</span></a>
       </li>
@@ -117,7 +115,7 @@ messages %} {% for category, message in messages %} {% if category ==
 {% endif %} {% endfor %} {% endif %} {% endwith %}
 
 <!-- Begin page content -->
-<main role="main" class="container">
+<main role="main" class="container b">
     <br>
     {% block content %}{% endblock %}
 </main>

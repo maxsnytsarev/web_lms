@@ -3,21 +3,14 @@ from flask import Flask, flash
 from data import db_session
 from data.users import User
 import os
-import datetime
-from data.news import News
-from flask import render_template, redirect, request, make_response, session, abort, url_for
+from flask import render_template, redirect, request
 from forms.user import RegisterForm
 from forms.profile import ProfileForm
-from forms.news import NewsForm
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from forms.login import LoginForm
-from forms.info import InfoForm
 from forms.forget_pass_0 import forget_pass_0
-from forms.forget_pass import forget_pass_1
 from forms.forget_pass_2 import forget_pass_2
 from forms.messages import Message
-# mess = open('messages.json')
-# messages = load(mess)
 with open('messages.json') as mess0:
     messages = load(mess0)
 app = Flask(__name__)
@@ -25,12 +18,10 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 users = []
-# forms = [('/', None)]
-# forms1 = []
 cnt_messages = dict()
 
 
-def islow(s:str):
+def islow(s: str):
     for i in s:
         if i.isupper():
             return True
@@ -119,7 +110,6 @@ def logout():
 @login_required
 def profile():
     form = ProfileForm()
-    db_sess = db_session.create_session()
     return render_template('profile.html', form=form, flag=True)
 
 
@@ -145,8 +135,6 @@ def forget0():
 @app.route('/forget_pass_1/<email>', methods=['GET', 'POST'])
 def forget(email):
     form = forget_pass_2()
-    # forms.append(('/forget_pass_1', form))
-    form_new = LoginForm()
     yes = False
     if form.validate_on_submit():
         if not islow(str(form.newpass1.data)):
@@ -155,7 +143,8 @@ def forget(email):
         if len(form.newpass1.data) < 6:
             yes = False
             flash('Пароль должен содержать хотя бы 6 знаков', category='error')
-        if form.newpass1.data == form.newpass2.data and not (not islow(str(form.newpass1.data)) or len(form.newpass1.data) < 6):
+        if form.newpass1.data == form.newpass2.data and not (not islow(str(form.newpass1.data))
+                                                             or len(form.newpass1.data) < 6):
             yes = True
         if yes:
             db_sess = db_session.create_session()
@@ -206,7 +195,8 @@ def request_():
     req1 = []
     if user.requests:
         users = user.requests.split('#$#')
-        req = [[db_sess.query(User).filter(User.email == i).first().first_name, db_sess.query(User).filter(User.email == i).first().second_name, i] for i in users if i != '']
+        req = [[db_sess.query(User).filter(User.email == i).first().first_name,
+                db_sess.query(User).filter(User.email == i).first().second_name, i] for i in users if i != '']
         req_set = []
         req1 = []
         for i in req:
@@ -287,8 +277,6 @@ def find():
                 if user.email not in b:
                     flag = True
                     users_norm.append(i)
-
-    # users_norm = [i for i in users if i.email != '' and user.email not in i.requests.split("#$#") and user.email not in i.requests.split("#$#")]
     return render_template('find_friends.html', users=users_norm, flag1=flag, flag=True, l=len(users_norm))
 
 
@@ -323,7 +311,8 @@ def mess():
     req = []
     if user.friends:
         users = user.friends.split('#$#')
-        req = [[db_sess.query(User).filter(User.email == i).first().first_name, db_sess.query(User).filter(User.email == i).first().second_name, i] for i in users if i != '']
+        req = [[db_sess.query(User).filter(User.email == i).first().first_name,
+                db_sess.query(User).filter(User.email == i).first().second_name, i] for i in users if i != '']
     return render_template('messages.html', sp=req, flag=True, l=len(req))
 
 
@@ -385,112 +374,21 @@ def mess_(email_):
                 with open('messages.json', 'w') as mess5:
                     dump(messages, mess5)
             from_me = messages[current_user.email][email]
-        # can = False
-        # if messages[current_user.email][email]:
-        #     can = True
         return render_template('mess_friend.html', n1=n1, n2=n2, friend=email, mess=from_me, form=form, flag=True)
 
-# @app.route('/posts')
-# def posts():
-
-
-# @app.route('/message_f/<email_>', methods=['GET', 'POST'])
-# def mess_(email_):
-#     sp = []
-#     email = email_
-#     db_sess = db_session.create_session()
-#     user = db_sess.query(User).filter(User.email == email).first()
-#     n1 = user.first_name
-#     n2 = user.second_name
-#     can = False
-#     if email_[0] == '[':
-#         sp = email_.split(',')
-#         for i in range(len(sp)):
-#             if sp[i][0] == ' ':
-#                 sp[i] = sp[i][1:]
-#             if sp[i][0] == '[':
-#                 sp[i] = sp[i][1:]
-#             elif sp[i][-1] == ']':
-#                 sp[i] = sp[i][:-1]
-#             sp[i] = sp[i][1:-1]
-#         email = sp[1]
-#         can = True
-#     form = Message()
-#     if can:
-#         form.mess.data = sp[0]
-#     if request.method == 'GET':
-#         y = messages[current_user.email].get(email, 0)
-#         if not y:
-#             messages[current_user.email][email] = []
-#             messages[email][current_user.email] = []
-#             with open('messages.json', 'w') as mess2:
-#                 dump(messages, mess2)
-#         from_me = messages[current_user.email][email]
-#         can = False
-#         if messages[current_user.email][email]:
-#             can = True
-#         return render_template('mess_friend.html', n1=n1, n2=n2, mess=from_me, form=form, flag1=can, flag=True)
-#     if request.method == 'POST':
-#         y = messages[current_user.email].get(email, 0)
-#         if y == 0:
-#             messages[current_user.email][email] = []
-#             messages[email][current_user.email] = []
-#             with open('messages.json', 'w') as mess3:
-#                 dump(messages, mess3)
-#         from_me = messages[current_user.email][email]
-#         if form.mess.data:
-#             x = messages[current_user.email].get(email, 0)
-#             if x == 0:
-#                 messages[current_user.email][email] = [(form.mess.data, 0)]
-#                 messages[email][current_user.email] = [(form.mess.data, 1)]
-#                 with open('messages.json', 'w') as mess4:
-#                     dump(messages, mess4)
-#             else:
-#                 messages[current_user.email][email].append((form.mess.data, 0))
-#                 messages[email][current_user.email].append((form.mess.data, 1))
-#                 with open('messages.json', 'w') as mess5:
-#                     dump(messages, mess5)
-#             from_me = messages[current_user.email][email]
-#             form.mess.data = ''
-#         # can = False
-#         # if messages[current_user.email][email]:
-#         #     can = True
-#         return render_template('mess_friend.html', n1=n1, n2=n2, friend=email, mess=from_me, form=form, flag=True)
 
 def main():
     db_session.global_init("db/users.db")
-    user = User()
     db_sess = db_session.create_session()
     db_sess.query(User).filter(User.id >= 1).delete()
-    # db_sess.query(News).filter(News.id >= 4).delete()
     db_sess.commit()
 
 
 def main1():
     db_session.global_init("db/users.db")
-    # app.run()
-    user = User()
-    db_sess = db_session.create_session()
-    # db_sess.query(User).filter(User.id >= 1).delete()
-    # db_sess.query(News).filter(News.id >= 4).delete()
-    db_sess.commit()
 
-
-# import os
-#
-# from flask import Flask
-#
-# app = Flask(__name__)
-#
-#
-# @app.route("/")
-# def index():
-#     return "Привет от приложения Flask"
 
 if __name__ == '__main__':
-    # main()
-    # main1()
-    # db_session.global_init("db/blogs.db")
     # main()
     main1()
     port = int(os.environ.get("PORT", 8080))
