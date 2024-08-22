@@ -26,3 +26,6 @@
 Если хотите обновить переписку, нужно нажать на кнопку "обновить"
 
 ссылка на презентацию: https://docs.google.com/presentation/d/1khYNk62hD-sMaYtyM5ZKOdeLOuIUyirX/edit?usp=sharing&ouid=100973874282395627520&rtpof=true&sd=true
+
+
+Проект запускается через server.py
